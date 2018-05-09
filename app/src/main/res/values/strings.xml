@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Android_project_1601s</string>
     <string name="jump">跳过</string>
+    <string name="mobile_text">请输入手机号</string>
+    <string name="passwrod_text">请输入密码</string>
+    <string name="login">登陆</string>
+    <string name="apply">注册</string>
 </resources>
