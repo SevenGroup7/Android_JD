@@ -23,7 +23,7 @@ public class OkHttp implements Callback {
         mOkHttpClient = new OkHttpClient.Builder().build();
     }
 
-    private OkHttp getINSTANCE(){
+    public static OkHttp getINSTANCE(){
         if(INSTANCE == null){
             INSTANCE = new OkHttp();
 
