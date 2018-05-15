@@ -6,11 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".View.activitys.FragAllActivity">
 
-
-    <com.hjm.bottomtabbar.BottomTabBar
-        android:id="@+id/tabBar"
+    
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        ></com.hjm.bottomtabbar.BottomTabBar>
+        android:layout_marginBottom="56dp"
+        />
+
+    <com.roughike.bottombar.BottomBar
+        android:id="@+id/tabBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        app:bb_tabXmlResource="@xml/bottombar_menu"
+        ></com.roughike.bottombar.BottomBar>
 
 </RelativeLayout>

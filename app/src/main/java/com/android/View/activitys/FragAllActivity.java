@@ -2,79 +2,91 @@ package com.android.View.activitys;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.annotation.IdRes;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.View;
 
 import com.android.Presenter.MainPresenter;
-import com.android.R;
 import com.android.View.fragments.ClassifyFragment;
 import com.android.View.fragments.HomeFragment;
 import com.android.View.fragments.MineFragment;
 import com.android.View.fragments.ShoppingCarFragment;
-import com.hjm.bottomtabbar.BottomTabBar;
+import com.roughike.bottombar.BottomBar;
+
+import com.android.R;
+import com.roughike.bottombar.BottomBarTab;
+import com.roughike.bottombar.OnTabReselectListener;
+import com.roughike.bottombar.OnTabSelectListener;
+import com.roughike.bottombar.TabSelectionInterceptor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FragAllActivity extends BaseActivity<MainPresenter> {
 
-    private BottomTabBar tabBar;
+    private BottomBar bottomBar;
+    private List<Fragment> fragmentList;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_frag_all);
         initView();
+        create();
     }
 
     @Override
     void initView() {
-        tabBar = findViewById(R.id.tabBar);
+        bottomBar = (BottomBar) findViewById(R.id.tabBar);
+        viewPager = findViewById(R.id.vp);
+    }
 
-        tabBar.init(getSupportFragmentManager(),480,800)
-                .setImgSize(30,30)
-                .setFontSize(13)
-                .setChangeColor(Color.RED, Color.GRAY)
-                .setTabBarBackgroundColor(Color.LTGRAY)
-                .addTabItem("首页", R.drawable.home1, R.drawable.home0, HomeFragment.class)
-        //前面第一个是点击后的图片，第二个是点击前的图片
-                .addTabItem("分类", R.drawable.classify1, R.drawable.classify0, ClassifyFragment.class)
-                .addTabItem("购物车", R.drawable.shoppingcar1, R.drawable.shoppingcar0, ShoppingCarFragment.class)
-                .addTabItem("我的", R.drawable.mine1, R.drawable.mine0, MineFragment.class)
-                .isShowDivider(false);
+    private void create() {
+        fragmentList = new ArrayList<>();
+        fragmentList.add(new HomeFragment());
+        fragmentList.add(new ClassifyFragment());
+        fragmentList.add(new ShoppingCarFragment());
+        fragmentList.add(new MineFragment());
+        viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+            @Override
+            public Fragment getItem(int position) {
+                return fragmentList.get(position);
+            }
 
-
-        /**
-         * //关联到当前 activity
-         mBottomBar = BottomBar.attach(this, savedInstanceState);
-         //从 menu.xml初始化导航栏 并设置监听
-         mBottomBar.setItemsFromMenu(R.menu.bottombar_menu, new OnMenuTabClickListener() {
-        @Override
-        public void onMenuTabSelected(@IdRes int menuItemId) {
-        if (resId == R.id.bottomBarItemOne) {
-        //当tab被选中时候触发
-        }
-        }
-
-        @Override
-        public void onMenuTabReSelected(@IdRes int menuItemId) {
-        if (resId == R.id.bottomBarItemOne) {
-        //当前选中的 tab 再次被点击时候触发
-        }
-        }
+            @Override
+            public int getCount() {
+                return fragmentList.size();
+            }
         });
 
-         //设置导航栏选中时候的颜色 导航>=3的时候有效
-         mBottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.colorAccent));
-         mBottomBar.mapColorForTab(1, 0xFF5D4037);
-         mBottomBar.mapColorForTab(2, "#7B1FA2");
-         }
+        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+            @Override
+            public void onTabSelected(int tabId) {
+                switch (tabId) {
+                    case R.id.tab_home:
+                        viewPager.setCurrentItem(0);
+                        break;
 
-         @Override
-         protected void onSaveInstanceState(Bundle outState) {
-         super.onSaveInstanceState(outState);
-         //保存底部导航状态 这一步是必须的
-         mBottomBar.onSaveInstanceState(outState);
-         }
+                    case R.id.tab_classify:
+                        viewPager.setCurrentItem(1);
+                        break;
 
-         */
+                    case R.id.tab_shoppingcar:
+                        viewPager.setCurrentItem(2);
+                        break;
 
+                    case R.id.tab_mine:
+                        viewPager.setCurrentItem(3);
+                        break;
+                }
+            }
+        });
     }
+
 
     @Override
     void initDate() {

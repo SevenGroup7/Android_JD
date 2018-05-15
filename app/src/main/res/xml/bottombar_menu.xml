@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <tab
+        id="@+id/tab_home"
+        title="首页"
+        icon="@drawable/select"
+        />
+    <tab
+        id="@+id/tab_classify"
+        title="分类"
+        icon="@drawable/select2"
+        />
+    <tab
+        id="@+id/tab_shoppingcar"
+        title="购物车"
+        icon="@drawable/select3"
+        />
+    <tab
+        id="@+id/tab_mine"
+        title="我的"
+        icon="@drawable/select4"
+        />
+
+</tabs>
