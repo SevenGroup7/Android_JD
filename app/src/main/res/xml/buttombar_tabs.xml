@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <tab
+        id="@+id/tab_favorites"
+        icon="@drawable/home0"
+        title="首页"
+        barColorWhenSelected="#ccc" />
+    <tab
+        id="@+id/tab_nearby"
+        icon="@drawable/classify0"
+        title="发现"
+        barColorWhenSelected="#ccc" />
+    <tab
+        id="@+id/tab_friends"
+        icon="@drawable/shoppingcar0"
+        title="购物车"
+        barColorWhenSelected="#ccc" />
+
+    <tab
+        id="@+id/tab_mine"
+        icon="@drawable/mine0"
+        title="我的"
+        barColorWhenSelected="#ccc" />
+</tabs>
