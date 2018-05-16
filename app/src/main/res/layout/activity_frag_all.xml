@@ -6,16 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".View.activitys.FragAllActivity">
 
-    
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vp"
+
+    <RelativeLayout
+        android:id="@+id/contentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="56dp"
-        />
+        android:layout_above="@+id/bottomBar" />
 
     <com.roughike.bottombar.BottomBar
-        android:id="@+id/tabBar"
+        android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
