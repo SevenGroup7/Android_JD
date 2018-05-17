@@ -53,7 +53,6 @@ public class FragAllActivity extends BaseActivity<MainPresenter> {
     @Override
     void initView() {
         bottomBar = (BottomBar) findViewById(R.id.bottomBar);
-        View layout = findViewById(R.id.contentContainer);
     }
 
     private void create() {

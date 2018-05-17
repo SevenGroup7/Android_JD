@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.R;
+import com.tencent.bugly.crashreport.CrashReport;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
@@ -45,6 +46,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView() {
+//        CrashReport.testJavaCrash();//测试bugly
         scan.setOnClickListener(this);
         ssk.setOnClickListener(this);
         sskText.setOnClickListener(this);
