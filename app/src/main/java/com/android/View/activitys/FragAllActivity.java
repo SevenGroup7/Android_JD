@@ -1,14 +1,11 @@
 package com.android.View.activitys;
 
-import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.android.Presenter.MainPresenter;
 import com.android.View.fragments.ClassifyFragment;
@@ -20,22 +17,34 @@ import com.roughike.bottombar.BottomBar;
 import com.android.R;
 import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
-import com.roughike.bottombar.TabSelectionInterceptor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FragAllActivity extends BaseActivity<MainPresenter> {
 
     private BottomBar bottomBar;
-    private List<Fragment> fragmentList;
-    private ViewPager viewPager;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_frag_all);
 
+        /**
+         * 沉浸式状态栏
+         */
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //半透明头部状态栏，底部导航栏   布局在状态栏，导航栏下方
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
+
+
+        /**
+         * 标题栏
+         */
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         initView();
         create();
@@ -48,22 +57,6 @@ public class FragAllActivity extends BaseActivity<MainPresenter> {
     }
 
     private void create() {
-        /**
-         * fragmentList = new ArrayList<>();
-         fragmentList.add(new HomeFragment());
-         fragmentList.add(new ClassifyFragment());
-         fragmentList.add(new ShoppingCarFragment());
-         fragmentList.add(new MineFragment());
-         viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
-        @Override public Fragment getItem(int position) {
-        return fragmentList.get(position);
-        }
-
-        @Override public int getCount() {
-        return fragmentList.size();
-        }
-        });
-         */
 
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
