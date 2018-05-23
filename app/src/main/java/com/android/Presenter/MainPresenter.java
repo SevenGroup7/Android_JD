@@ -15,7 +15,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
         okHttp = OkHttp.getINSTANCE();
     }
 
-    public void login(String path, HashMap<String,String> hashMap){
+    public void Post(String path, HashMap<String,String> hashMap){
 
         okHttp.doPost(path, hashMap, new OkHttpCallBack() {
             @Override
@@ -33,7 +33,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
     }
 
 
-    public void apply(String path, HashMap<String,String> hashMap){
+    public void Get(String path, HashMap<String,String> hashMap){
 
         okHttp.doPost(path, hashMap, new OkHttpCallBack() {
             @Override

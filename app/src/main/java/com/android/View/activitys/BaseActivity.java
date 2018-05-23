@@ -17,7 +17,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         super.onCreate(savedInstanceState);
         setContentView(setChildContentView());
         initView();
-
+        initBaseDate();
         initDate();
     }
 

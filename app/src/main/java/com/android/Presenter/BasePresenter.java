@@ -1,5 +1,6 @@
 package com.android.Presenter;
 
+
 import com.android.Interfaces.IBaseView;
 
 public class BasePresenter<V extends IBaseView> {

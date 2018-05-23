@@ -1,4 +1,4 @@
-package com.android.View.fragments;
+package com.android.View.activitys;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
