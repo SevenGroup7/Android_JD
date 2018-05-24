@@ -1,32 +1,35 @@
 package com.android.View.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.os.SystemClock;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.Adapter.RecyclerViewAdapter;
-import com.android.Interfaces.IBaseView;
+import com.android.Module.Beans.BeanAll;
+import com.android.Presenter.MyPresenter;
 import com.android.R;
 import com.android.Utils.GlideImageLoader;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.android.View.MyViewInterface;
+import com.android.View.activitys.FragAllActivity;
+import com.google.gson.Gson;
 import com.youth.banner.Banner;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements View.OnClickListener, IBaseView {
+public class HomeFragment extends Fragment implements View.OnClickListener,MyViewInterface{
 
     private View view;
     private Toolbar toolbar;
@@ -36,89 +39,34 @@ public class HomeFragment extends Fragment implements View.OnClickListener, IBas
     private ImageView sskHelp;
     private LinearLayout message;
     private Banner banner;
-    private List<String> list = new ArrayList<>();
-    private List<String> images = new ArrayList<>();
-    private ListView listView;
-    private XRecyclerView xrlv;
-    private int curr;
-    private RecyclerViewAdapter adapter;
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+
+            List<String> imgs = (List<String>) msg.obj;
+            banner.setImages(imgs).start();
+        }
+    };
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        initImages();
-        initRecyclerView();
         initTitle();//标题
-        initBanner();//Banner
+        initView();//Banner
 
 
         return view;
     }
 
-    private void initRecyclerView() {
-        xrlv = view.findViewById(R.id.xr);
 
-        //LinearLayoutManager是线性布局，setOrientation可以设置他的方向是横向还是纵向。
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        xrlv.setLayoutManager(layoutManager);
-
-
-        xrlv.setLoadingListener(new XRecyclerView.LoadingListener() {
-            @Override
-            public void onRefresh() {
-                curr = 0;
-                list.clear();
-                initList(curr);
-                xrlv.refreshComplete();
-            }
-
-            @Override
-            public void onLoadMore() {
-                SystemClock.sleep(2000);
-                curr =curr+10;
-                initList(curr);
-                xrlv.refreshComplete();
-            }
-        });
-
-        curr = 0;
-        initList(curr);
-    }
-
-    private void initList(int itemSize) {
-        for (int i = itemSize; i < itemSize+50; i++) {
-            list.add("item" + i);
-        }
-
-        /**
-         * 为了不重复创建adapter
-         */
-        if(adapter == null){
-            adapter = new RecyclerViewAdapter(getActivity(),list);
-            xrlv.setAdapter(adapter);
-        }else {
-            adapter.notifyDataSetChanged();
-        }
-
-    }
-
-    private void initImages() {
-
-        images = new ArrayList<>();
-        images.add("https://www.zhaoapi.cn/images/quarter/ad1.png");
-        images.add("https://www.zhaoapi.cn/images/quarter/ad2.png");
-        images.add("https://www.zhaoapi.cn/images/quarter/ad3.png");
-        images.add("https://www.zhaoapi.cn/images/quarter/ad4.png");
-
-    }
-
-    private void initBanner() {
+    private void initView() {
 
         banner = view.findViewById(R.id.banner);
-        banner.setImageLoader(new GlideImageLoader()).setImages(images).start();
+        banner.setImageLoader(new GlideImageLoader());
+        MyPresenter myPresenter = new MyPresenter(this);
+        myPresenter.getDate("https://www.zhaoapi.cn/ad/getAd");
 
     }
 
@@ -137,6 +85,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener, IBas
         message.setOnClickListener(this);
     }
 
+    @Override
+    public void onSuccess(Object obj) {
+
+        String str = (String) obj;
+        Gson gson = new Gson();
+        BeanAll beanAll = gson.fromJson(str, BeanAll.class);
+        List<BeanAll.DataBean> list = beanAll.getData();
+        List<String> images = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            images.add(list.get(i).getIcon());
+        }
+        Message msg = Message.obtain();
+        msg.obj = images;
+        handler.sendMessage(msg);
+    }
 
     @Override
     public void onClick(View v) {
@@ -158,4 +121,5 @@ public class HomeFragment extends Fragment implements View.OnClickListener, IBas
                 break;
         }
     }
+
 }

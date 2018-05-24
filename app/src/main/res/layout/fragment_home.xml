@@ -16,16 +16,6 @@
             android:layout_height="150dp"
             android:layout_below="@id/inclu"/>
 
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
-        android:id="@+id/xr"
-        android:layout_below="@id/banner"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-
-
-
-    </com.jcodecraeer.xrecyclerview.XRecyclerView>
 
 
 </RelativeLayout>

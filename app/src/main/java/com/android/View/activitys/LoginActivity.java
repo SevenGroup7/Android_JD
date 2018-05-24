@@ -1,15 +1,12 @@
 package com.android.View.activitys;
 
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
 
-import com.android.Interfaces.IMainView;
-import com.android.Presenter.MainPresenter;
 import com.android.R;
 
-public class LoginActivity extends BaseActivity<MainPresenter> {
+public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +24,6 @@ public class LoginActivity extends BaseActivity<MainPresenter> {
     @Override
     void initDate() {
 
-    }
-
-    @Override
-    MainPresenter setPresenter() {
-        return new MainPresenter();
     }
 
     @Override

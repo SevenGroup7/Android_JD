@@ -2,12 +2,16 @@ package com.android.View.activitys;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.util.Log;
 import android.view.WindowManager;
+import android.widget.Toast;
 
-import com.android.Presenter.MainPresenter;
+import com.android.Presenter.MyPresenter;
+import com.android.View.MyViewInterface;
 import com.android.View.fragments.ClassifyFragment;
 import com.android.View.fragments.HomeFragment;
 import com.android.View.fragments.MineFragment;
@@ -18,7 +22,7 @@ import com.android.R;
 import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 
-public class FragAllActivity extends BaseActivity<MainPresenter> {
+public class FragAllActivity extends BaseActivity{
 
     private BottomBar bottomBar;
     private Toolbar toolbar;
@@ -48,46 +52,14 @@ public class FragAllActivity extends BaseActivity<MainPresenter> {
 
         initView();
         create();
+        initDate();
     }
+
 
     @Override
     void initView() {
         bottomBar = (BottomBar) findViewById(R.id.bottomBar);
-    }
 
-    private void create() {
-
-        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
-            @Override
-            public void onTabSelected(int tabId) {
-                Object ob = null;
-                switch (tabId) {
-                    case R.id.tab_home:
-                        ob = new HomeFragment();
-                        break;
-
-                    case R.id.tab_classify:
-                        ob = new ClassifyFragment();
-                        break;
-
-                    case R.id.tab_shoppingcar:
-                        ob = new ShoppingCarFragment();
-                        break;
-
-                    case R.id.tab_mine:
-                        ob = new MineFragment();
-                        break;
-                }
-                getSupportFragmentManager().beginTransaction().replace(R.id.contentContainer, (Fragment) ob).commit();
-            }
-        });
-
-        bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
-            @Override
-            public void onTabReSelected(int tabId) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.contentContainer, new HomeFragment()).commit();
-            }
-        });
     }
 
 
@@ -97,18 +69,51 @@ public class FragAllActivity extends BaseActivity<MainPresenter> {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        presenter.detachView();
-    }
-
-    @Override
-    MainPresenter setPresenter() {
-        return new MainPresenter();
-    }
-
-    @Override
     int setChildContentView() {
         return R.layout.activity_frag_all;
     }
+
+    private void create() {
+
+        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+            @Override
+            public void onTabSelected(int tabId) {
+                Fragment fragment = null;
+                switch (tabId) {
+                    case R.id.tab_home:
+                        fragment = new HomeFragment();
+                        break;
+
+                    case R.id.tab_classify:
+                        fragment = new ClassifyFragment();
+                        break;
+
+                    case R.id.tab_shoppingcar:
+                        fragment = new ShoppingCarFragment();
+                        break;
+
+                    case R.id.tab_mine:
+                        fragment = new MineFragment();
+                        break;
+                }
+//                fragment.setArguments(bundle);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.contentContainer, fragment)
+                        .commit();
+            }
+        });
+
+        bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
+            @Override
+            public void onTabReSelected(int tabId) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.contentContainer, new HomeFragment())
+                        .commit();
+            }
+        });
+    }
+
+
 }
