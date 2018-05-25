@@ -58,8 +58,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyVi
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-
-
             switch (msg.what) {
                 case 0:
                     List<String> imgs = (List<String>) msg.obj;
@@ -85,8 +83,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyVi
     private TextView mMiaoshaShiTv;
     private TextView mMiaoshaMinterTv;
     private TextView mMiaoshaSecondTv;
-    private Gson gson;
     private RecyclerMSAdapter msAdapter;
+    private Gson gson;
 
     @Nullable
     @Override
@@ -96,7 +94,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyVi
         initTitle();//标题
         initView();//Banner
         initNine();//分类入口
-        initMSText();
+        initMSText();//倒计时(为实现)
         initMiaoSha();//秒杀
 
         return view;
@@ -106,6 +104,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyVi
 
         rcv2 = view.findViewById(R.id.rcv2);
         rcv2.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+        MyMSPresenter myMSPresenter = new MyMSPresenter(this);
+        myMSPresenter.getDate("https://www.zhaoapi.cn/ad/getAd");
         msAdapter = new RecyclerMSAdapter(getActivity());
         rcv2.setAdapter(msAdapter);
     }
@@ -193,6 +193,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyVi
     @Override
     public void nineSuccess(Object obj) {
         String str = (String) obj;
+        gson = new Gson();
         NineBean nineBean = gson.fromJson(str, NineBean.class);
         List<NineBean.DataBean> list = nineBean.getData();
         Message msg = Message.obtain();
@@ -205,6 +206,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, MyVi
     @Override
     public void onMiaoShu(Object obj) {
         String str = (String) obj;
+        gson = new Gson();
         BeanAll beanAll = gson.fromJson(str, BeanAll.class);
         List<BeanAll.MiaoshaBean.ListBeanX> list = beanAll.getMiaosha().getList();
         Message msg = Message.obtain();

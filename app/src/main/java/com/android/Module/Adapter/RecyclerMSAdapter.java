@@ -41,8 +41,8 @@ public class RecyclerMSAdapter extends RecyclerView.Adapter {
 
         ViewHolder viewHolder = (ViewHolder) holder;
         Glide.with(context).load(list.get(position).getImages()).into(viewHolder.imageView);
-        viewHolder.textView.setText("￥ "+list.get(position).getTitle());
-        viewHolder.textView2.setText(list.get(position).getPrice());
+        viewHolder.textView.setText(list.get(position).getTitle());
+        viewHolder.textView2.setText("￥ "+list.get(position).getPrice());
     }
 
     @Override
@@ -50,8 +50,8 @@ public class RecyclerMSAdapter extends RecyclerView.Adapter {
         return list.size();
     }
 
-    public void setDate(List<BeanAll.MiaoshaBean.ListBeanX> list){
-        list.addAll(list);
+    public void setDate(List<BeanAll.MiaoshaBean.ListBeanX> data){
+        list.addAll(data);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -62,8 +62,8 @@ public class RecyclerMSAdapter extends RecyclerView.Adapter {
 
         public ViewHolder(View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.rcv_img);
-            textView = itemView.findViewById(R.id.rcv_text);
+            imageView = itemView.findViewById(R.id.rcv_ms_img);
+            textView = itemView.findViewById(R.id.rcv_ms_text);
             textView2 = itemView.findViewById(R.id.rcv_ms_price);
         }
     }
