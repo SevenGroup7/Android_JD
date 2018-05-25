@@ -16,6 +16,25 @@
             android:layout_height="150dp"
             android:layout_below="@id/inclu"/>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcv"
+            android:layout_below="@id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ></android.support.v7.widget.RecyclerView>
 
+        <include
+            android:id="@+id/ms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rcv"
+            layout="@layout/miaosha"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcv2"
+            android:layout_below="@id/ms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ></android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

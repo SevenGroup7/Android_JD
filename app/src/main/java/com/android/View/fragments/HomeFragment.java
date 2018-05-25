@@ -7,6 +7,9 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,19 +20,30 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.Module.Adapter.RecyclerAdapter;
+import com.android.Module.Adapter.RecyclerMSAdapter;
 import com.android.Module.Beans.BeanAll;
+import com.android.Module.Beans.NineBean;
+import com.android.Presenter.MyMSPresenter;
+import com.android.Presenter.MyNinePresenter;
 import com.android.Presenter.MyPresenter;
 import com.android.R;
 import com.android.Utils.GlideImageLoader;
+import com.android.View.MyMSInterface;
+import com.android.View.MyNineInterface;
 import com.android.View.MyViewInterface;
 import com.android.View.activitys.FragAllActivity;
 import com.google.gson.Gson;
 import com.youth.banner.Banner;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements View.OnClickListener,MyViewInterface{
+public class HomeFragment extends Fragment implements View.OnClickListener, MyViewInterface, MyNineInterface, MyMSInterface {
 
     private View view;
     private Toolbar toolbar;
@@ -39,14 +53,40 @@ public class HomeFragment extends Fragment implements View.OnClickListener,MyVie
     private ImageView sskHelp;
     private LinearLayout message;
     private Banner banner;
-    private Handler handler = new Handler(){
+    private RecyclerView rcv;
+    private RecyclerView rcv2;
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
 
-            List<String> imgs = (List<String>) msg.obj;
-            banner.setImages(imgs).start();
+
+            switch (msg.what) {
+                case 0:
+                    List<String> imgs = (List<String>) msg.obj;
+                    banner.setImages(imgs).start();
+                    break;
+                case 1:
+                    List<NineBean.DataBean> list = (List<NineBean.DataBean>) msg.obj;
+                    adapter.setDate(list);
+                    adapter.notifyDataSetChanged();
+                    break;
+                case 2:
+                    List<BeanAll.MiaoshaBean.ListBeanX> listBeanXList = (List<BeanAll.MiaoshaBean.ListBeanX>) msg
+                            .obj;
+                    msAdapter.setDate(listBeanXList);
+                    msAdapter.notifyDataSetChanged();
+                    break;
+            }
         }
     };
+    private RecyclerAdapter adapter;
+    private TextView tvMiaosha;
+    private TextView mMiaoshaTimeTv;
+    private TextView mMiaoshaShiTv;
+    private TextView mMiaoshaMinterTv;
+    private TextView mMiaoshaSecondTv;
+    private Gson gson;
+    private RecyclerMSAdapter msAdapter;
 
     @Nullable
     @Override
@@ -55,11 +95,38 @@ public class HomeFragment extends Fragment implements View.OnClickListener,MyVie
 
         initTitle();//标题
         initView();//Banner
-
+        initNine();//分类入口
+        initMSText();
+        initMiaoSha();//秒杀
 
         return view;
     }
 
+    private void initMiaoSha() {
+
+        rcv2 = view.findViewById(R.id.rcv2);
+        rcv2.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+        msAdapter = new RecyclerMSAdapter(getActivity());
+        rcv2.setAdapter(msAdapter);
+    }
+
+    private void initMSText() {
+
+        mMiaoshaShiTv = view.findViewById(R.id.tv_miaosha_shi);
+        mMiaoshaTimeTv = view.findViewById(R.id.tv_miaosha_time);
+        mMiaoshaMinterTv = view.findViewById(R.id.tv_miaosha_minter);
+        mMiaoshaSecondTv = view.findViewById(R.id.tv_miaosha_second);
+
+    }
+
+    private void initNine() {
+        rcv = view.findViewById(R.id.rcv);
+        rcv.setLayoutManager(new GridLayoutManager(getActivity(), 2, GridLayoutManager.HORIZONTAL, false));
+        MyNinePresenter myNinePresenter = new MyNinePresenter(this);
+        myNinePresenter.getDate("https://www.zhaoapi.cn/product/getCatagory");
+        adapter = new RecyclerAdapter(getActivity());
+        rcv.setAdapter(adapter);
+    }
 
     private void initView() {
 
@@ -89,7 +156,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,MyVie
     public void onSuccess(Object obj) {
 
         String str = (String) obj;
-        Gson gson = new Gson();
+        gson = new Gson();
         BeanAll beanAll = gson.fromJson(str, BeanAll.class);
         List<BeanAll.DataBean> list = beanAll.getData();
         List<String> images = new ArrayList<>();
@@ -97,6 +164,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,MyVie
             images.add(list.get(i).getIcon());
         }
         Message msg = Message.obtain();
+        msg.what = 0;
         msg.obj = images;
         handler.sendMessage(msg);
     }
@@ -122,4 +190,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener,MyVie
         }
     }
 
+    @Override
+    public void nineSuccess(Object obj) {
+        String str = (String) obj;
+        NineBean nineBean = gson.fromJson(str, NineBean.class);
+        List<NineBean.DataBean> list = nineBean.getData();
+        Message msg = Message.obtain();
+        msg.what = 1;
+        msg.obj = list;
+        handler.sendMessage(msg);
+
+    }
+
+    @Override
+    public void onMiaoShu(Object obj) {
+        String str = (String) obj;
+        BeanAll beanAll = gson.fromJson(str, BeanAll.class);
+        List<BeanAll.MiaoshaBean.ListBeanX> list = beanAll.getMiaosha().getList();
+        Message msg = Message.obtain();
+        msg.what = 2;
+        msg.obj = list;
+        handler.sendMessage(msg);
+    }
 }

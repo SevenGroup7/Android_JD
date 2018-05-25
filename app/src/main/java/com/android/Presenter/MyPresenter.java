@@ -1,6 +1,7 @@
 package com.android.Presenter;
 
 import com.android.Module.MyModule;
+import com.android.View.MyNineInterface;
 import com.android.View.MyViewInterface;
 
 public class MyPresenter implements MyPresenterInterface {
